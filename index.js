@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
 
-mongoose.connect('mongodb://localhost:27017/tush', {
+mongoose.connect('mongodb+srv://root:root@cluster0.xrmtj21.mongodb.net/tush?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   family: 4 
