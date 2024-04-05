@@ -77,8 +77,6 @@ app.get("/users", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 9002;
-
-app.listen(PORT, () => { 
-  console.log(`Application started at port ${PORT}`);
+app.listen(3000, () => { 
+  console.log("Application started at port 3000");
 });
