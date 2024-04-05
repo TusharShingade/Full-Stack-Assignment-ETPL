@@ -4,13 +4,14 @@ import mongoose from "mongoose";
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-mongoose.connect('mongodb+srv://root:root@cluster0.xrmtj21.mongodb.net/tush?retryWrites=true&w=majority&appName=Cluster0', {
+const mongoURI = 'mongodb+srv://root:root@cluster1.3b90av8.mongodb.net/tush?retryWrites=true&w=majority&appName=Cluster1';
+
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  family: 4 
 })
 .then(() => {
   console.log('Connected to MongoDB');
@@ -26,9 +27,7 @@ const userSchema = new mongoose.Schema({
   password: String
 });
 
-const User = new mongoose.model("User", userSchema);
-
-
+const User = mongoose.model("User", userSchema);
 
 app.post("/login", async (req, res) => { 
   const { email, password } = req.body;
@@ -48,8 +47,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
-
 app.post("/register", async (req, res) => { 
   const { name, bdate, email, password } = req.body;
   try {
@@ -67,24 +64,21 @@ app.post("/register", async (req, res) => {
       res.send({ message: "Successfully Registered" });
     }
   } catch (err) {
-    res.status(500).send({ message: "Internal Server Error" });
+    res.send({ message: "Internal Server Error" });
   }
 });
-
-
-
 
 app.get("/users", async (req, res) => {
   try {
     const users = await User.find();
     res.send(users);
   } catch (err) {
-    res.status(500).send({ message: "Internal Server Error" });
+    res.send({ message: "Internal Server Error" });
   }
 });
 
+const PORT = process.env.PORT || 9002;
 
-
-app.listen(9002, () => { 
-  console.log("Application started at port 9002");
+app.listen(PORT, () => { 
+  console.log(`Application started at port ${PORT}`);
 });
