@@ -6,6 +6,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 const mongoURI = 'mongodb+srv://root:root@cluster1.3b90av8.mongodb.net/tush?retryWrites=true&w=majority&appName=Cluster1';
 
