@@ -8,7 +8,7 @@ app.use(express.urlencoded({ extended: true }));
 //app.use(cors());
 
 
-const mongoURI = 'mongodb+srv://root:root123@cluster1.3b90av8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1';
+const mongoURI = 'mongodb+srv://root:root@cluster1.3b90av8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1';
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
