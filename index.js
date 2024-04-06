@@ -10,16 +10,14 @@ app.use(cors());
 
 const mongoURI = 'mongodb+srv://root:root@cluster1.3b90av8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1';
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => {
-  console.log('Connected to MongoDB');
-})
-.catch((error) => {
-  console.error('MongoDB connection error:', error);
-});
+mongoose.connect(mongoURI)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('MongoDB connection error:', error);
+  });
+
 
 const userSchema = new mongoose.Schema({
   name: String,
