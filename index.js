@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: 'https://easy-blue-miniskirt.cyclic.app' }));
 
 
-const mongoURI = 'mongodb+srv://tush0417:NxPyqwgYB0hWPQ5b@cluster5.th0k6rq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster5';
+const mongoURI = 'mongodb+srv://tush0417:NxPyqwgYB0hWPQ5b@cluster5.th0k6rq.mongodb.net/';
 
 mongoose.connect(mongoURI)
   .then(() => {
