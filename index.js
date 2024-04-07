@@ -5,13 +5,11 @@ import mongoose from "mongoose";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.use(cors());
 app.use(cors({ origin: 'https://easy-blue-miniskirt.cyclic.app' }));
-
 
 const mongoURI = 'mongodb+srv://tush0417:NxPyqwgYB0hWPQ5b@cluster5.th0k6rq.mongodb.net/';
 
-mongoose.connect(mongoURI)
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -19,52 +17,51 @@ mongoose.connect(mongoURI)
     console.error('MongoDB connection error:', error);
   });
 
-
 const userSchema = new mongoose.Schema({
-  name: String,
-  bdate: String, 
-  email: String,
-  password: String
+  name: { type: String, required: true },
+  bdate: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true }
 });
 
 const User = mongoose.model("User", userSchema);
 
-app.all("/login", async (req, res) => { 
+app.post("/login", async (req, res) => { 
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email: email });
-    if (user) {
-      if (password === user.password) {
-        res.send({ message: "Login Successful", user: user });
-      } else {
-        res.send({ message: "Invalid Password" });
-      }
+    if (!user) {
+      return res.status(404).send({ message: "User Not Found" });
+    }
+    if (password === user.password) {
+      res.send({ message: "Login Successful", user: user });
     } else {
-      res.send({ message: "User Not Found" });
+      res.status(401).send({ message: "Invalid Password" });
     }
   } catch (err) {
-    res.send({ message: "Internal Server Error" });
+    console.error("Error:", err);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 
-app.all("/register", async (req, res) => { 
+app.post("/register", async (req, res) => { 
   const { name, bdate, email, password } = req.body;
   try {
-    const user = await User.findOne({ email: email });
-    if (user) {
-      res.send({ message: "User Already Registered" });
-    } else {
-      const newUser = new User({
-        name,
-        bdate,
-        email,
-        password
-      });
-      await newUser.save();
-      res.send({ message: "Successfully Registered" });
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser) {
+      return res.status(400).send({ message: "User Already Registered" });
     }
+    const newUser = new User({
+      name,
+      bdate,
+      email,
+      password
+    });
+    await newUser.save();
+    res.status(201).send({ message: "Successfully Registered" });
   } catch (err) {
-    res.send({ message: "Internal Server Error" });
+    console.error("Error:", err);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 
@@ -73,7 +70,8 @@ app.get("/users", async (req, res) => {
     const users = await User.find();
     res.send(users);
   } catch (err) {
-    res.send({ message: "Internal Server Error" });
+    console.error("Error:", err);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 
