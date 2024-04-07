@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-app.get("/login", async (req, res) => { 
+app.post("/login", async (req, res) => { 
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email: email });
@@ -47,7 +47,7 @@ app.get("/login", async (req, res) => {
   }
 });
 
-app.get("/register", async (req, res) => { 
+app.post("/register", async (req, res) => { 
   const { name, bdate, email, password } = req.body;
   try {
     const user = await User.findOne({ email: email });
